@@ -48,6 +48,6 @@ app.get("/", (req, res) => {
   console.log("Hello world!");
 });
 
-app.listen(PORT, () => {
-  console.log(`[server]: Server is running at http://localhost:${PORT}`);
+const server = app.listen(process.env.PORT || PORT, () => {
+  console.log(`[server]: Server is running`);
 });
