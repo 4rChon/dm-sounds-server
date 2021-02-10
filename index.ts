@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import ytpl from "./services/ytpl";
 import ytdl from "./services/ytdl";
+import { AddressInfo } from "net";
 
 const app = express();
 app.use(express.json());
@@ -26,9 +27,10 @@ app.get("/stream/:url", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  console.log("Hello world!");
+  res.send("Hello world!");
 });
 
-app.listen(process.env.PORT || PORT, () => {
-  console.log(`[server]: Server is running`);
+const server = app.listen(process.env.PORT || PORT, () => {
+  const address = server.address() as AddressInfo;
+  console.log(`[server]: Server is running at ${address.address}:${address.port}`);
 });
