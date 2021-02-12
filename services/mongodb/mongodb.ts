@@ -18,42 +18,24 @@ db.once("once", () => {
 });
 
 async function addPlaylist(playlist: PlaylistModel): Promise<void | ErrorModel> {
-  try {
-    await Playlist.findOneAndUpdate(
-      { id: playlist.id },
-      {
-        id: playlist.id,
-        title: playlist.title,
-        bestThumbnail: playlist.bestThumbnail,
-        items: playlist.items
-      },
-      { upsert: true }
-    ).exec();
-  } catch (err) {
-    return handleError(err);
-  }
+  await Playlist.findOneAndUpdate(
+    { id: playlist.id },
+    {
+      id: playlist.id,
+      title: playlist.title,
+      bestThumbnail: playlist.bestThumbnail,
+      items: playlist.items
+    },
+    { upsert: true }
+  ).exec();
 }
 
 async function getPlaylists(): Promise<PlaylistModel[] | ErrorModel> {
-  try {
-    return (await Playlist.find().exec()) as any as PlaylistModel[];
-  } catch (err) {
-    return handleError(err);
-
-  }
+  return (await Playlist.find().exec()) as any as PlaylistModel[];
 }
 
 async function close(): Promise<void | ErrorModel> {
-  try {
-    await db.close();
-  } catch (err) {
-    return handleError(err);
-  }
-}
-
-function handleError(message: string): ErrorModel {
-  console.error(`[database]: ${message}`);
-  return { message }
+  await db.close();
 }
 
 export default {
