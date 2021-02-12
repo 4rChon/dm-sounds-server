@@ -1,6 +1,6 @@
 import { Image, Item } from "ytpl";
 
-export interface PlaylistModel {
+export default interface PlaylistModel {
   id: string;
   title: string;
   bestThumbnail: Image;
