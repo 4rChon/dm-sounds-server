@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import ErrorModel from "../../models/error.model";
 import PlaylistModel from "../../models/playlist.model";
 import Playlist from "./playlist.schema";
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.1esps.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
@@ -16,7 +17,7 @@ db.once("once", () => {
   console.log("[database]: Database connected!");
 });
 
-async function addPlaylist(playlist: PlaylistModel): Promise<void> {
+async function addPlaylist(playlist: PlaylistModel): Promise<void | ErrorModel> {
   try {
     await Playlist.findOneAndUpdate(
       { id: playlist.id },
@@ -29,25 +30,30 @@ async function addPlaylist(playlist: PlaylistModel): Promise<void> {
       { upsert: true }
     ).exec();
   } catch (err) {
-    console.error(`[database]: ${err}`);
+    return handleError(err);
   }
 }
 
-async function getPlaylists(): Promise<PlaylistModel[]> {
+async function getPlaylists(): Promise<PlaylistModel[] | ErrorModel> {
   try {
     return (await Playlist.find().exec()) as any as PlaylistModel[];
   } catch (err) {
-    console.error(`[database]: ${err}`);
-    return [];
+    return handleError(err);
+
   }
 }
 
-async function close(): Promise<void> {
+async function close(): Promise<void | ErrorModel> {
   try {
     await db.close();
   } catch (err) {
-    console.error(`[database]: ${err}`);
+    return handleError(err);
   }
+}
+
+function handleError(message: string): ErrorModel {
+  console.error(`[database]: ${message}`);
+  return { message }
 }
 
 export default {

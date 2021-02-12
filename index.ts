@@ -25,8 +25,7 @@ app.post("/playlist/", async (req, res) => {
 
 app.get("/playlist/", async (req, res) => {
   try {
-    const playlists: PlaylistModel[] = await mongodb.getPlaylists();
-    res.send(playlists);
+    res.send(await mongodb.getPlaylists());
   } catch (err) {
     console.error(err);
     res.sendStatus(500);
