@@ -1,10 +1,7 @@
-import express from "express";
 import cors from "cors";
-import ytpl from "./services/ytpl";
-import ytdl from "./services/ytdl";
+import express from "express";
 import { AddressInfo } from "net";
-import PlaylistModel from "./models/playlist.model"
-import mongodb from "./services/mongodb/mongodb";
+import playlistRepository from "./repositories/playlist.repository";
 
 const app = express();
 app.use(express.json());
@@ -14,9 +11,7 @@ const PORT = 3000;
 
 app.post("/playlist/", async (req, res) => {
   try {
-    const playlist: PlaylistModel = await ytpl.getPlaylist(req.body.url);
-    await mongodb.addPlaylist(playlist);
-    res.sendStatus(200);
+    await playlistRepository.addPlaylist(req.body);
   } catch (err) {
     console.error(err);
     res.sendStatus(500);
@@ -25,7 +20,7 @@ app.post("/playlist/", async (req, res) => {
 
 app.get("/playlist/", async (req, res) => {
   try {
-    res.send(await mongodb.getPlaylists());
+    res.send(await playlistRepository.getPlaylists());
   } catch (err) {
     console.error(err);
     res.sendStatus(500);
@@ -34,7 +29,7 @@ app.get("/playlist/", async (req, res) => {
 
 app.get("/stream/:url", (req, res) => {
   try {
-    ytdl.getAudioStream(`https://www.youtube.com/watch?v=${req.params.url}`).pipe(res);
+    playlistRepository.getAudioStream(`https://www.youtube.com/watch?v=${req.params.url}`).pipe(res);
   } catch (err) {
     res.send(err).sendStatus(500).end();
   }
@@ -50,5 +45,5 @@ const server = app.listen(process.env.PORT || PORT, () => {
 });
 
 server.on('close', async () => {
-  await mongodb.close();
+  await playlistRepository.dispose();
 })
