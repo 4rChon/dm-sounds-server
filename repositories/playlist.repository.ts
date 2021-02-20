@@ -12,7 +12,9 @@ class playlistRepository {
   }
 
   public async addPlaylist(model: PlaylistFormModel): Promise<void> {
-    return dbService.addPlaylist(model);
+    if (ytplService.validatePlaylist(model.id)) {
+      return dbService.addPlaylist(model);
+    }
   }
 
   public async getPlaylists(): Promise<Array<PlaylistModel>> {
