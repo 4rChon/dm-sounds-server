@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import { PlaylistFormModel } from "../../models/playlist-form.model";
-import Playlist from "./playlist.schema";
+import mongoose from 'mongoose';
+import { PlaylistFormModel } from '../../models/playlist-form.model';
+import Playlist from './playlist.schema';
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.1esps.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
 mongoose.connect(uri, {
@@ -11,9 +11,9 @@ mongoose.connect(uri, {
 });
 
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "[database]: Database connection error:"));
-db.once("once", () => {
-  console.log("[database]: Database connected!");
+db.on('error', console.error.bind(console, '[database]: Database connection error:'));
+db.once('once', () => {
+  console.log('[database]: Database connected!');
 });
 
 async function addPlaylist(playlist: PlaylistFormModel): Promise<void> {

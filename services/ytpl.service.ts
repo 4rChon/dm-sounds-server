@@ -1,4 +1,4 @@
-import ytpl, { Result } from "ytpl";
+import ytpl, { Result } from 'ytpl';
 
 class ytplService {
   public async getPlaylist(id: string): Promise<Result> {

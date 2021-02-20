@@ -1,12 +1,12 @@
-import { Readable } from "stream";
+import { Readable } from 'stream';
 
-import ytdlService from "../services/ytdl.service";
-import ytplService from "../services/ytpl.service";
-import dbService from "../services/mongodb/mongodb";
-import { PlaylistFormModel } from "../models/playlist-form.model";
-import PlaylistModel from "../models/playlist.model";
+import ytdlService from '../services/ytdl.service';
+import ytplService from '../services/ytpl.service';
+import dbService from '../services/mongodb/mongodb';
+import { PlaylistFormModel } from '../models/playlist-form.model';
+import PlaylistModel from '../models/playlist.model';
 
-class playlistRepository {
+class PlaylistRepository {
   public getAudioStream(url: string): Readable {
     return ytdlService.getAudioStream(url);
   }
@@ -15,6 +15,8 @@ class playlistRepository {
     if (ytplService.validatePlaylist(model.id)) {
       return dbService.addPlaylist(model);
     }
+
+    return Promise.reject();
   }
 
   public async getPlaylists(): Promise<Array<PlaylistModel>> {
@@ -39,5 +41,5 @@ class playlistRepository {
   }
 }
 
-const service = new playlistRepository();
+const service = new PlaylistRepository();
 export default service;

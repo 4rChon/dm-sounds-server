@@ -1,4 +1,4 @@
-import { Image, Item } from "ytpl";
+import { Image, Item } from 'ytpl';
 
 export default interface PlaylistModel {
   id: string;
