@@ -6,7 +6,7 @@ const app = new App(
   [
     new PlaylistsController(),
     new StreamsController()
-  ], 3000
+  ], parseInt(process.env.PORT || '')
 );
 
 app.listen().on('close', async () => {
