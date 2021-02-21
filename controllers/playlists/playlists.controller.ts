@@ -1,8 +1,8 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database-exception';
+import DuplicatePlaylistException from '../../exceptions/duplicate-playlist-exception';
 import InvalidPlaylistIdException from '../../exceptions/invalid-playlist-id.exception';
 import PlaylistRepository from '../../repositories/playlist.repository';
-import YTPLService from '../../services/ytpl.service';
 import Controller from '../controller.interface';
 
 export default class PlaylistsController implements Controller {
@@ -18,9 +18,9 @@ export default class PlaylistsController implements Controller {
     PlaylistRepository.addPlaylist(req.body)
       .then(result => {
         if (result) {
-          res.sendStatus(200)
+          next(new DuplicatePlaylistException());
         } else {
-          next(new DatabaseException());
+          res.status(200).send({ message: 'Playlist added' })
         }
       })
       .catch(() => next(new InvalidPlaylistIdException()));

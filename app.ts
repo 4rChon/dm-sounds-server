@@ -1,10 +1,10 @@
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { Server } from 'http';
 import mongoose, { Connection } from 'mongoose';
 import HttpException from './exceptions/http.exception';
-import playlistRepository from './repositories/playlist.repository';
 
 function loggerMiddleware(req: Request, res: Response, next: NextFunction) {
   console.log(`${req.method} ${req.path}`);
