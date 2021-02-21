@@ -1,6 +1,8 @@
 import cors from 'cors';
+import 'dotenv/config';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { Server } from 'http';
+import mongoose, { Connection } from 'mongoose';
 import HttpException from './exceptions/http.exception';
 import playlistRepository from './repositories/playlist.repository';
 
@@ -18,6 +20,8 @@ function errorHandlingMiddleware(err: HttpException, req: Request, res: Response
 class App {
   public app: Application;
 
+  private db: Connection;
+
   constructor(controllers: Array<any>, public readonly port: number) {
     this.app = express();
 
@@ -25,6 +29,22 @@ class App {
     this.app.use(express.json());
     this.app.use(cors());
     this.app.use(loggerMiddleware);
+
+    // init db
+    const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.1esps.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+
+    mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+      autoIndex: false,
+    });
+
+    this.db = mongoose.connection;
+    this.db.on('error', console.error.bind(console, '[database]: Database connection error:'));
+    this.db.once('once', () => {
+      console.log('[database]: Database connected!');
+    });
 
     // init controllers
     controllers.forEach(controller => {
@@ -46,7 +66,7 @@ class App {
   };
 
   public async dispose(): Promise<void> {
-    await playlistRepository.dispose();
+    await this.db.close();
   }
 }
 

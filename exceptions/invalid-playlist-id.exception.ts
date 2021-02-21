@@ -1,9 +1,7 @@
 import HttpException from './http.exception';
 
-class InvalidPlaylistIdException extends HttpException {
+export default class InvalidPlaylistIdException extends HttpException {
   constructor() {
-    super(400, 'Invalid Playlist ID');
+    super(400, 'Invalid playlist ID');
   }
 }
-
-export default InvalidPlaylistIdException;

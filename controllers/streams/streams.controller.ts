@@ -1,7 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
-import playlistRepository from '../../repositories/playlist.repository';
+import StreamUrlException from '../../exceptions/stream-url.exception';
+import PlaylistRepository from '../../repositories/playlist.repository';
+import Controller from '../controller.interface';
 
-class StreamsController {
+export default class StreamsController implements Controller {
   public path = '/streams';
   public router = express.Router();
 
@@ -11,11 +13,9 @@ class StreamsController {
 
   streamUrl = (req: Request, res: Response, next: NextFunction) => {
     try {
-      playlistRepository.getAudioStream(`https://www.youtube.com/watch?v=${req.params.url}`).pipe(res);
+      PlaylistRepository.getAudioStream(`https://www.youtube.com/watch?v=${req.params.url}`).pipe(res);
     } catch (err) {
-      res.status(500).send(err).end();
+      next(new StreamUrlException());
     }
   };
 }
-
-export default StreamsController;

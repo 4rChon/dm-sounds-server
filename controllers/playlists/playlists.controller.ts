@@ -1,8 +1,11 @@
 import express, { Request, Response, NextFunction } from 'express';
+import DatabaseException from '../../exceptions/database-exception';
 import InvalidPlaylistIdException from '../../exceptions/invalid-playlist-id.exception';
-import playlistRepository from '../../repositories/playlist.repository';
+import PlaylistRepository from '../../repositories/playlist.repository';
+import YTPLService from '../../services/ytpl.service';
+import Controller from '../controller.interface';
 
-class PlaylistsController {
+export default class PlaylistsController implements Controller {
   public path = '/playlists';
   public router = express.Router();
 
@@ -12,22 +15,25 @@ class PlaylistsController {
   }
 
   addPlaylist = (req: Request, res: Response, next: NextFunction) => {
-    playlistRepository.addPlaylist(req.body)
-      .then(
-        () => res.sendStatus(50)
-      ).catch(
-        () => next(new InvalidPlaylistIdException())
-      );
+    PlaylistRepository.addPlaylist(req.body)
+      .then(result => {
+        if (result) {
+          res.sendStatus(200)
+        } else {
+          next(new DatabaseException());
+        }
+      })
+      .catch(() => next(new InvalidPlaylistIdException()));
   };
 
-  getPlaylists = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      res.send(await playlistRepository.getPlaylists());
-    } catch (err) {
-      console.error(err);
-      res.sendStatus(500);
-    }
+  getPlaylists = (req: Request, res: Response, next: NextFunction) => {
+    PlaylistRepository.getPlaylists()
+      .then(playlists => {
+        if (playlists) {
+          res.send(playlists)
+        } else {
+          next(new DatabaseException());
+        }
+      });
   };
 }
-
-export default PlaylistsController;

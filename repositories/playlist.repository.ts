@@ -1,29 +1,29 @@
 import { Readable } from 'stream';
 
-import ytdlService from '../services/ytdl.service';
-import ytplService from '../services/ytpl.service';
-import dbService from '../services/mongodb/mongodb';
-import { PlaylistFormModel } from '../models/playlist-form.model';
-import PlaylistModel from '../models/playlist.model';
+import PlaylistModelInterface from '../controllers/playlists/playlist.interface';
+import PlaylistViewModel from '../view-models/playlist.view-model';
+import PlaylistService from '../services/playlist.service';
+import YTDLService from '../services/ytdl.service';
+import YTPLService from '../services/ytpl.service';
 
-class PlaylistRepository {
-  public getAudioStream(url: string): Readable {
-    return ytdlService.getAudioStream(url);
+export default class PlaylistRepository {
+  public static getAudioStream(url: string): Readable {
+    return YTDLService.getAudioStream(url);
   }
 
-  public async addPlaylist(model: PlaylistFormModel): Promise<void> {
-    if (ytplService.validatePlaylist(model.id)) {
-      return dbService.addPlaylist(model);
+  public static async addPlaylist(model: PlaylistModelInterface): Promise<PlaylistModelInterface | null> {
+    if (YTPLService.validatePlaylist(model.id)) {
+      return PlaylistService.addPlaylist(model);
     }
 
     return Promise.reject();
   }
 
-  public async getPlaylists(): Promise<Array<PlaylistModel>> {
-    const dbResult = await dbService.getPlaylists() as Array<PlaylistFormModel>;
+  public static async getPlaylists(): Promise<Array<PlaylistViewModel>> {
+    const dbResult = await PlaylistService.getPlaylists() as Array<PlaylistModelInterface>;
 
     return await Promise.all(dbResult.map(async (playlist) => {
-      const ytplResult = await ytplService.getPlaylist(playlist.id);
+      const ytplResult = await YTPLService.getPlaylist(playlist.id);
       return {
         id: playlist.id,
         title: ytplResult.title,
@@ -35,11 +35,4 @@ class PlaylistRepository {
       };
     }));
   }
-
-  public async dispose(): Promise<void> {
-    await dbService.close();
-  }
 }
-
-const service = new PlaylistRepository();
-export default service;

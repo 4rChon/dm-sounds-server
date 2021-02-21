@@ -1,11 +1,11 @@
-import { Image, Item } from 'ytpl';
+import mongoose from 'mongoose';
+import Playlist from '../controllers/playlists/playlist.interface';
 
-export default interface PlaylistModel {
-  id: string;
-  title: string;
-  bestThumbnail: Image;
-  items: Array<Item>;
-  shuffle: boolean;
-  loop: boolean;
-  replaceAll: boolean;
-}
+const playlistSchema = new mongoose.Schema({
+  id: { type: String, index: true },
+  shuffle: Boolean,
+  loop: Boolean,
+  replaceAll: Boolean
+});
+
+export default mongoose.model<Playlist & mongoose.Document>('Playlist', playlistSchema);
