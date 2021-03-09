@@ -12,6 +12,10 @@ export default class SongsService {
     return songModel.find().exec();
   }
 
+  public static async getSongsByIDs(ids: Array<string>): Promise<Array<ISong>> {
+    return songModel.find().where('id').in(ids).exec();
+  }
+
   public static async getSong(id: string): Promise<ISong | null> {
     return songModel.findOne({ id }).exec();
   }

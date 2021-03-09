@@ -32,10 +32,19 @@ export default class SongsRepository {
     }));
   }
 
+  public static async getSongsByIDs(ids: Array<string>): Promise<Array<SongViewModel>> {
+    const songs = await SongsService.getSongsByIDs(ids);
+
+    return Promise.all(songs.map(async song => {
+      const filters = await FiltersService.getFiltersByNames(song.filters);
+      return { id: song.id, loop: song.loop, name: song.name, filters, colour: song.colour };
+    }));
+  }
+
   public static async getSong(id: string): Promise<SongViewModel | null> {
     const song = await SongsService.getSong(id);
     if (!song) {
-      return null;
+      return Promise.reject('Song not found');
     }
 
     const filters = await FiltersService.getFiltersByNames(song.filters);

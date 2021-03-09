@@ -5,7 +5,7 @@ import filterModel from '../models/filter.model';
 export default class FiltersService {
   public static async addFilter(filter: IFilter): Promise<IFilter | null> {
     return filterModel.findOneAndUpdate(
-      { name: filter.name }, filter, { upsert: true }
+      { name: filter.name }, filter
     ).exec();
   }
 
