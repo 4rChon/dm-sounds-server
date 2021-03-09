@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
 import DuplicateFilterException from '../../exceptions/duplicate-filter.exception';
 import InvalidColourException from '../../exceptions/invalid-color.exception';
-import FilterRepository from '../../repositories/filter.repository';
+import FiltersRepository from '../../repositories/filters.repository';
 import IController from '../controller.interface';
 
 export default class FiltersController implements IController {
@@ -13,11 +13,12 @@ export default class FiltersController implements IController {
     this.router.post(this.path, this.addFilter);
     this.router.get(`${this.path}/:name`, this.getFilter);
     this.router.get(this.path, this.getFilters);
+    this.router.put(this.path, this.updateFilter);
     this.router.delete(`${this.path}/:name`, this.removeFilter);
   }
 
   addFilter = (req: Request, res: Response, next: NextFunction) => {
-    FilterRepository.addFilter(req.body)
+    FiltersRepository.addFilter(req.body)
       .then(result => {
         if (result) {
           next(new DuplicateFilterException());
@@ -30,7 +31,7 @@ export default class FiltersController implements IController {
   }
 
   getFilter = (req: Request, res: Response, next: NextFunction) => {
-    FilterRepository.getFilter(req.params.name).then(filter => {
+    FiltersRepository.getFilter(req.params.name).then(filter => {
       if (filter) {
         res.send(filter);
       } else {
@@ -40,7 +41,7 @@ export default class FiltersController implements IController {
   }
 
   getFilters = (req: Request, res: Response, next: NextFunction) => {
-    FilterRepository.getFilters().then(filters => {
+    FiltersRepository.getFilters().then(filters => {
       if (filters) {
         res.send(filters);
       } else {
@@ -50,7 +51,17 @@ export default class FiltersController implements IController {
   }
 
   removeFilter = (req: Request, res: Response, next: NextFunction) => {
-    FilterRepository.removeFilter(req.params.name).then(filter => {
+    FiltersRepository.removeFilter(req.params.name).then(filter => {
+      if (filter) {
+        res.send(filter);
+      } else {
+        next(new DatabaseException());
+      }
+    });
+  }
+
+  updateFilter = (req: Request, res: Response, next: NextFunction) => {
+    FiltersRepository.updateFilter(req.body.id, req.body).then(filter => {
       if (filter) {
         res.send(filter);
       } else {

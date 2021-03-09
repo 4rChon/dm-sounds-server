@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import StreamUrlException from '../../exceptions/stream-url.exception';
-import PlaylistRepository from '../../repositories/playlist.repository';
+import PlaylistsRepository from '../../repositories/playlists.repository';
 import IController from '../controller.interface';
 
 export default class StreamsController implements IController {
@@ -13,7 +13,7 @@ export default class StreamsController implements IController {
 
   streamUrl = (req: Request, res: Response, next: NextFunction) => {
     try {
-      PlaylistRepository.getAudioStream(`https://www.youtube.com/watch?v=${req.params.url}`).pipe(res);
+      PlaylistsRepository.getAudioStream(`https://www.youtube.com/watch?v=${req.params.url}`).pipe(res);
     } catch (err) {
       next(new StreamUrlException());
     }

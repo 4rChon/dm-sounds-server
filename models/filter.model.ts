@@ -1,13 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 import IFilter from '../controllers/filters/filter.interface';
+import { colourSchema } from './colour.model';
 
-const filterSchema = new mongoose.Schema({
+export const filterSchema = new Schema({
   name: String,
-  colour: {
-    r: Number,
-    g: Number,
-    b: Number
-  }
+  colour: colourSchema
 });
 
-export default mongoose.model<IFilter & mongoose.Document>('Filter', filterSchema);
+export default mongoose.model<IFilter & Document>('Filter', filterSchema);

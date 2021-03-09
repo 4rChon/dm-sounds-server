@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
 import DuplicatePlaylistException from '../../exceptions/duplicate-playlist.exception';
 import InvalidPlaylistIdException from '../../exceptions/invalid-playlist-id.exception';
-import PlaylistRepository from '../../repositories/playlist.repository';
+import PlaylistsRepository from '../../repositories/playlists.repository';
 import IController from '../controller.interface';
 
 export default class PlaylistsController implements IController {
@@ -15,7 +15,7 @@ export default class PlaylistsController implements IController {
   }
 
   addPlaylist = (req: Request, res: Response, next: NextFunction) => {
-    PlaylistRepository.addPlaylist(req.body)
+    PlaylistsRepository.addPlaylist(req.body)
       .then(result => {
         if (result) {
           next(new DuplicatePlaylistException());
@@ -27,7 +27,7 @@ export default class PlaylistsController implements IController {
   };
 
   getPlaylists = (req: Request, res: Response, next: NextFunction) => {
-    PlaylistRepository.getPlaylists()
+    PlaylistsRepository.getPlaylists()
       .then(playlists => {
         if (playlists) {
           res.send(playlists)

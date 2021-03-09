@@ -1,8 +1,6 @@
+import IColour from "../colours/colour.interface";
+
 export default interface IFilter {
   name: string;
-  colour: {
-    r: number;
-    g: number;
-    b: number;
-  };
+  colour: IColour;
 }

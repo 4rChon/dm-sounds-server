@@ -8,4 +8,12 @@ export default class YTDLService {
       filter: 'audioonly',
     });
   }
+
+  public static validateID(id: string): boolean {
+    return ytdl.validateID(id);
+  }
+
+  public static validateURL(url: string): boolean {
+    return ytdl.validateURL(url);
+  }
 }

@@ -1,7 +1,7 @@
 import IPlaylist from '../controllers/playlists/playlist.interface';
 import PlaylistModel from '../models/playlist.model';
 
-export default class PlaylistService {
+export default class PlaylistsService {
   public static async addPlaylist(playlist: IPlaylist): Promise<IPlaylist | null> {
     return PlaylistModel.findOneAndUpdate(
       { id: playlist.id }, playlist, { upsert: true }
