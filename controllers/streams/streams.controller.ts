@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
 import StreamUrlException from '../../exceptions/stream-url.exception';
 import PlaylistRepository from '../../repositories/playlist.repository';
-import Controller from '../controller.interface';
+import IController from '../controller.interface';
 
-export default class StreamsController implements Controller {
+export default class StreamsController implements IController {
   public path = '/streams';
   public router = express.Router();
 

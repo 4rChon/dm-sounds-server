@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Playlist from '../controllers/playlists/playlist.interface';
+import IPlaylist from '../controllers/playlists/playlist.interface';
 
 const playlistSchema = new mongoose.Schema({
   id: { type: String, index: true },
@@ -8,4 +8,4 @@ const playlistSchema = new mongoose.Schema({
   replaceAll: Boolean
 });
 
-export default mongoose.model<Playlist & mongoose.Document>('Playlist', playlistSchema);
+export default mongoose.model<IPlaylist & mongoose.Document>('Playlist', playlistSchema);

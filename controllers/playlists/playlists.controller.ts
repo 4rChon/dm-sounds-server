@@ -1,11 +1,11 @@
 import express, { NextFunction, Request, Response } from 'express';
-import DatabaseException from '../../exceptions/database-exception';
-import DuplicatePlaylistException from '../../exceptions/duplicate-playlist-exception';
+import DatabaseException from '../../exceptions/database.exception';
+import DuplicatePlaylistException from '../../exceptions/duplicate-playlist.exception';
 import InvalidPlaylistIdException from '../../exceptions/invalid-playlist-id.exception';
 import PlaylistRepository from '../../repositories/playlist.repository';
-import Controller from '../controller.interface';
+import IController from '../controller.interface';
 
-export default class PlaylistsController implements Controller {
+export default class PlaylistsController implements IController {
   public path = '/playlists';
   public router = express.Router();
 
