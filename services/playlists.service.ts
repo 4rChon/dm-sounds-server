@@ -12,6 +12,10 @@ export default class PlaylistsService {
     return playlistModel.find().exec();
   }
 
+  public static async getPlaylistsByIDs(ids: Array<string>): Promise<Array<IPlaylist>> {
+    return playlistModel.find().where('id').in(ids).exec();
+  }
+
   public static async getPlaylist(id: string): Promise<IPlaylist | null> {
     return playlistModel.findOne({ id }).exec();
   }

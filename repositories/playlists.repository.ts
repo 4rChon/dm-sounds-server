@@ -78,6 +78,26 @@ export default class PlaylistsRepository {
     }));
   }
 
+  public static async getPlaylistsByIDs(ids: Array<string>): Promise<Array<PlaylistViewModel>> {
+    const playlists = await PlaylistsService.getPlaylistsByIDs(ids);
+
+    return await Promise.all(playlists.map(async (playlist) => {
+      const filters = await FiltersService.getFiltersByNames(playlist.filters);
+      const songs = await SongsRepository.getSongsByIDs(playlist.songs);
+      return {
+        id: playlist.id,
+        name: playlist.name,
+        thumbnail: playlist.thumbnail,
+        songs,
+        filters,
+        colour: playlist.colour,
+        shuffle: playlist.shuffle,
+        loop: playlist.loop,
+        replaceAll: playlist.replaceAll
+      };
+    }));
+  }
+
   public static async getPlaylist(id: string): Promise<PlaylistViewModel | null> {
     const playlist = await PlaylistsService.getPlaylist(id);
     if (!playlist) {

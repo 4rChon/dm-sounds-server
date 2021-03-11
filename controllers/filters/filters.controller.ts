@@ -61,7 +61,7 @@ export default class FiltersController implements IController {
   }
 
   updateFilter = (req: Request, res: Response, next: NextFunction) => {
-    FiltersRepository.updateFilter(req.body.id, req.body).then(filter => {
+    FiltersRepository.updateFilter(req.body.name, req.body).then(filter => {
       if (filter) {
         res.send(filter);
       } else {

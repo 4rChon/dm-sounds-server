@@ -1,9 +1,7 @@
-import IPlaylist from "../playlists/playlist.interface";
-import ISong from "../songs/song.interface";
 
 export default interface ICampaign {
-  index: string;
+  id: string;
   name: string;
-  playlists: Array<IPlaylist>;
-  songs: Array<ISong>;
+  playlists: Array<string>;
+  songs: Array<string>;
 }
