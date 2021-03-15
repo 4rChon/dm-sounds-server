@@ -26,6 +26,7 @@ export default class PlaylistsRepository {
         name: item.title,
         loop: false,
         filters: [],
+        thumbnail: item.bestThumbnail.url ?? '',
         colour: { r: 1, g: 1, b: 1 }
       };
       await SongsRepository.addSong(songModel);

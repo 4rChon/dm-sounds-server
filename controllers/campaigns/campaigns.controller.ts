@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
 import DuplicateCampaignException from '../../exceptions/duplicate-campaign.exception';
+import HttpException from '../../exceptions/http.exception';
 import CampaignsRepository from '../../repositories/campaigns.repository';
 import IController from '../controller.interface';
 
@@ -10,8 +11,9 @@ export default class CampaignsController implements IController {
 
   constructor() {
     this.router.post(this.path, this.addCampaign);
-    this.router.get(`${this.path}/:id`, this.getCampaign);
+    this.router.get(`${this.path}/get-single/:id`, this.getCampaign);
     this.router.get(this.path, this.getCampaigns);
+    this.router.get(`${this.path}/get-names`, this.getCampaignNames);
     this.router.put(this.path, this.updateCampaign);
     this.router.delete(`${this.path}/:id`, this.removeCampaign);
   }
@@ -34,13 +36,25 @@ export default class CampaignsController implements IController {
       } else {
         next(new DatabaseException());
       }
+    }).catch((reason) => {
+      next(new HttpException(400, reason));
     });
   }
 
   getCampaigns = (req: Request, res: Response, next: NextFunction) => {
-    CampaignsRepository.getCampaigns().then(campaign => {
-      if (campaign) {
-        res.send(campaign);
+    CampaignsRepository.getCampaigns().then(campaigns => {
+      if (campaigns !== undefined) {
+        res.send(campaigns);
+      } else {
+        next(new DatabaseException());
+      }
+    });
+  }
+
+  getCampaignNames = (req: Request, res: Response, next: NextFunction) => {
+    CampaignsRepository.getCampaignNames().then(campaigns => {
+      if (campaigns !== undefined) {
+        res.send(campaigns);
       } else {
         next(new DatabaseException());
       }

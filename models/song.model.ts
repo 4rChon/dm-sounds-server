@@ -7,6 +7,7 @@ const songSchema = new Schema({
   url: String,
   name: String,
   loop: Boolean,
+  thumbnail: String,
   filters: [String],
   colour: colourSchema
 });

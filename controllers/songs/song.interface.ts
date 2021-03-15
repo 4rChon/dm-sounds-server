@@ -5,5 +5,6 @@ export default interface ISong {
   name: string;
   loop: boolean;
   filters: Array<string>;
+  thumbnail: string;
   colour: IColour;
 }
