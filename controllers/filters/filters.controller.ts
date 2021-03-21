@@ -11,7 +11,7 @@ export default class FiltersController implements IController {
 
   constructor() {
     this.router.post(this.path, this.addFilter);
-    this.router.get(`${this.path}/:name`, this.getFilter);
+    this.router.get(`${this.path}/get-single/:name`, this.getFilter);
     this.router.get(this.path, this.getFilters);
     this.router.put(this.path, this.updateFilter);
     this.router.delete(`${this.path}/:name`, this.removeFilter);

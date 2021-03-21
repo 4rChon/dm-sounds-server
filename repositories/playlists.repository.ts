@@ -25,6 +25,7 @@ export default class PlaylistsRepository {
         id: item.id,
         name: item.title,
         loop: false,
+        replaceAll: false,
         filters: [],
         thumbnail: item.bestThumbnail.url ?? '',
         colour: { r: 1, g: 1, b: 1 }

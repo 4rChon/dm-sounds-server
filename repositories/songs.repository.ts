@@ -7,7 +7,7 @@ import SongViewModel from "../view-models/song.view-model";
 
 export default class SongsRepository {
   public static async addSong(model: ISong): Promise<ISong | null> {
-    // move this to db level
+    // move validation to db level
     if (!YTDLService.validateID(model.id)) {
       return Promise.reject('Invalid song ID');
     }
@@ -28,7 +28,7 @@ export default class SongsRepository {
 
     return Promise.all(songs.map(async song => {
       const filters = await FiltersService.getFiltersByNames(song.filters);
-      return { id: song.id, loop: song.loop, name: song.name, filters, colour: song.colour };
+      return { id: song.id, loop: song.loop, replaceAll: song.replaceAll, name: song.name, filters, colour: song.colour };
     }));
   }
 
@@ -37,7 +37,7 @@ export default class SongsRepository {
 
     return Promise.all(songs.map(async song => {
       const filters = await FiltersService.getFiltersByNames(song.filters);
-      return { id: song.id, loop: song.loop, name: song.name, filters, colour: song.colour };
+      return { id: song.id, loop: song.loop, replaceAll: song.replaceAll, name: song.name, filters, colour: song.colour };
     }));
   }
 
@@ -48,7 +48,7 @@ export default class SongsRepository {
     }
 
     const filters = await FiltersService.getFiltersByNames(song.filters);
-    return { id: song.id, loop: song.loop, name: song.name, filters, colour: song.colour };
+    return { id: song.id, loop: song.loop, replaceAll: song.replaceAll, name: song.name, filters, colour: song.colour };
   }
 
   public static async removeSong(id: string): Promise<ISong | null> {

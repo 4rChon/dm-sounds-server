@@ -13,7 +13,7 @@ export default class PlaylistsController implements IController {
     this.router.post(this.path, this.addPlaylist);
     this.router.post(`${this.path}/import`, this.importPlaylist);
     this.router.get(this.path, this.getPlaylists);
-    this.router.get(`${this.path}/:id`, this.getPlaylist);
+    this.router.get(`${this.path}/get-single/:id`, this.getPlaylist);
     this.router.put(this.path, this.updatePlaylist);
     this.router.delete(`${this.path}/:id`, this.removePlaylist);
   }

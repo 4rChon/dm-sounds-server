@@ -4,6 +4,7 @@ export default interface ISong {
   id: string;
   name: string;
   loop: boolean;
+  replaceAll: boolean;
   filters: Array<string>;
   thumbnail: string;
   colour: IColour;
