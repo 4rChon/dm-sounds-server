@@ -31,7 +31,7 @@ export default class PlaylistsController implements IController {
   };
 
   importPlaylist = (req: Request, res: Response, next: NextFunction) => {
-    PlaylistsRepository.importPlaylist(req.body.id)
+    PlaylistsRepository.importPlaylist(req.body)
       .then(result => {
         if (result) {
           next(new DuplicatePlaylistException());

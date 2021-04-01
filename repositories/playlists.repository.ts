@@ -8,18 +8,19 @@ import IPlaylist from '../controllers/playlists/playlist.interface';
 import ColoursService from '../services/colours.service';
 import FiltersService from '../services/filters.service';
 import SongsRepository from './songs.repository';
+import ImportPlaylistViewModel from '../view-models/import-playlist.view-model';
 
 export default class PlaylistsRepository {
   public static getAudioStream(url: string): Readable {
     return YTDLService.getAudioStream(url);
   }
 
-  public static async importPlaylist(id: string): Promise<IPlaylist | null> {
-    if (!YTPLService.validatePlaylist(id)) {
+  public static async importPlaylist(model: ImportPlaylistViewModel): Promise<IPlaylist | null> {
+    if (!YTPLService.validatePlaylist(model.id)) {
       return Promise.reject('Invalid playlist ID');
     }
 
-    const playlist = await YTPLService.getPlaylist(id);
+    const playlist = await YTPLService.getPlaylist(model.id);
     const songs = await Promise.all(playlist.items.map(async item => {
       const songModel = {
         id: item.id,
@@ -39,11 +40,11 @@ export default class PlaylistsRepository {
       name: playlist.title,
       thumbnail: playlist.bestThumbnail.url ?? '',
       songs,
-      filters: [],
-      colour: { r: 1, g: 1, b: 1 },
-      loop: false,
-      shuffle: false,
-      replaceAll: false
+      filters: model.filters ?? [],
+      colour: model.colour ?? { r: 1, g: 1, b: 1 },
+      loop: model.loop,
+      shuffle: model.shuffle,
+      replaceAll: model.replaceAll
     });
   }
 

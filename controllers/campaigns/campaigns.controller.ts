@@ -74,7 +74,7 @@ export default class CampaignsController implements IController {
   updateCampaign = (req: Request, res: Response, next: NextFunction) => {
     CampaignsRepository.updateCampaign(req.body.id, req.body).then(campaign => {
       if (campaign) {
-        res.send(campaign);
+        res.status(200).send({ message: 'Campaign updated!', data: campaign });
       } else {
         next(new DatabaseException());
       }
