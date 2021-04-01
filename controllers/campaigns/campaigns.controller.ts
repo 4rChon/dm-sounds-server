@@ -64,7 +64,7 @@ export default class CampaignsController implements IController {
   removeCampaign = (req: Request, res: Response, next: NextFunction) => {
     CampaignsRepository.removeCampaign(req.params.id).then(campaign => {
       if (campaign) {
-        res.send(campaign);
+        res.status(200).send({ message: 'Campaign removed!', data: campaign });
       } else {
         next(new DatabaseException());
       }
