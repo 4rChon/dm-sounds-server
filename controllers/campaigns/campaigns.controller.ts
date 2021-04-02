@@ -21,7 +21,7 @@ export default class CampaignsController implements IController {
 
   addCampaign = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = CampaignsRepository.addCampaign(req.body);
+      const result = await CampaignsRepository.addCampaign(req.body);
       if (result) {
         next(new DuplicateCampaignException());
       } else {
@@ -73,7 +73,7 @@ export default class CampaignsController implements IController {
 
   removeCampaign = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const campaign = CampaignsRepository.removeCampaign(req.params.id);
+      const campaign = await CampaignsRepository.removeCampaign(req.params.id);
       if (campaign) {
         res.status(200).send({ message: 'Campaign removed!', data: campaign });
       } else {

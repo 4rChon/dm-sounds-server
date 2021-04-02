@@ -21,7 +21,7 @@ export default class PlaylistsController implements IController {
 
   addPlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = PlaylistsRepository.addPlaylist(req.body);
+      const result = await PlaylistsRepository.addPlaylist(req.body);
       if (result) {
         next(new DuplicatePlaylistException());
       } else {
@@ -34,7 +34,7 @@ export default class PlaylistsController implements IController {
 
   importPlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = PlaylistsRepository.importPlaylist(req.body);
+      const result = await PlaylistsRepository.importPlaylist(req.body);
       if (result) {
         next(new DuplicatePlaylistException());
       } else {
@@ -47,7 +47,7 @@ export default class PlaylistsController implements IController {
 
   getPlaylists = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const playlists = PlaylistsRepository.getPlaylists();
+      const playlists = await PlaylistsRepository.getPlaylists();
       if (playlists) {
         res.send(playlists)
       } else {
@@ -60,7 +60,7 @@ export default class PlaylistsController implements IController {
 
   getPlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const playlist = PlaylistsRepository.getPlaylist(req.params.id);
+      const playlist = await PlaylistsRepository.getPlaylist(req.params.id);
       if (playlist) {
         res.send(playlist);
       } else {
@@ -73,7 +73,7 @@ export default class PlaylistsController implements IController {
 
   updatePlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const playlist = PlaylistsRepository.updatePlaylist(req.body.id, req.body);
+      const playlist = await PlaylistsRepository.updatePlaylist(req.body.id, req.body);
       if (playlist) {
         res.send(playlist);
       } else {
@@ -86,7 +86,7 @@ export default class PlaylistsController implements IController {
 
   removePlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const playlist = PlaylistsRepository.removePlaylist(req.params.id);
+      const playlist = await PlaylistsRepository.removePlaylist(req.params.id);
       if (playlist) {
         res.send(playlist);
       } else {

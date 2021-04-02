@@ -32,7 +32,7 @@ export default class SongsController implements IController {
 
   getSong = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const song = SongsRepository.getSong(req.params.id);
+      const song = await SongsRepository.getSong(req.params.id);
       if (song) {
         res.send(song);
       } else {
@@ -58,7 +58,7 @@ export default class SongsController implements IController {
 
   removeSong = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const song = SongsRepository.removeSong(req.params.id);
+      const song = await SongsRepository.removeSong(req.params.id);
       if (song) {
         res.send(song);
       } else {
@@ -71,7 +71,7 @@ export default class SongsController implements IController {
 
   updateSong = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const song = SongsRepository.updateSong(req.body.id, req.body);
+      const song = await SongsRepository.updateSong(req.body.id, req.body);
       if (song) {
         res.send(song);
       } else {
