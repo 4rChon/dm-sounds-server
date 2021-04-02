@@ -45,7 +45,7 @@ export default class SongsController implements IController {
 
   getSongs = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const songs = SongsRepository.getSongs();
+      const songs = await SongsRepository.getSongs();
       if (songs) {
         res.send(songs);
       } else {
