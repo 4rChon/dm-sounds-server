@@ -1,5 +1,4 @@
-import IColour from '../controllers/colours/colour.interface';
-import IFilter from '../controllers/filters/filter.interface';
+import IFilter from '../models/filter.interface';
 import SongViewModel from './song.view-model';
 
 export default interface PlaylistViewModel {
@@ -8,7 +7,7 @@ export default interface PlaylistViewModel {
   thumbnail: string;
   songs: Array<SongViewModel>;
   filters: Array<IFilter>;
-  colour: IColour;
+  colour: string;
   shuffle: boolean;
   loop: boolean;
   replaceAll: boolean;

@@ -1,5 +1,4 @@
-import ISong from "../controllers/songs/song.interface";
-import ColoursService from "../services/colours.service";
+import ISong from "../models/song.interface";
 import FiltersService from "../services/filters.service";
 import SongsService from "../services/songs.service";
 import YTDLService from "../services/ytdl.service";
@@ -10,10 +9,6 @@ export default class SongsRepository {
     // move validation to db level
     if (!YTDLService.validateID(model.id)) {
       return Promise.reject('Invalid song ID');
-    }
-
-    if (!ColoursService.validateColor(model.colour)) {
-      return Promise.reject('Colour values not within the range [0-1]');
     }
 
     if (!(await FiltersService.validateFilters(model.filters))) {
@@ -58,10 +53,6 @@ export default class SongsRepository {
   public static async updateSong(id: string, model: ISong): Promise<ISong | null> {
     if (!YTDLService.validateID(model.id)) {
       return Promise.reject('Invalid song ID');
-    }
-
-    if (!ColoursService.validateColor(model.colour)) {
-      return Promise.reject('Colour values not within the range [0-1]');
     }
 
     if (!(await FiltersService.validateFilters(model.filters))) {

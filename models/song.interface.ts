@@ -1,11 +1,11 @@
-import IColour from "../colours/colour.interface";
+import IFilter from './filter.interface';
 
 export default interface ISong {
   id: string;
   name: string;
   loop: boolean;
   replaceAll: boolean;
-  filters: Array<string>;
+  filters: Array<IFilter['name']>;
   thumbnail: string;
-  colour: IColour;
+  colour: string;
 }

@@ -1,14 +1,13 @@
 import { Readable } from 'stream';
 import { v4 as uuidv4 } from 'uuid';
-import PlaylistViewModel from '../view-models/playlist.view-model';
+import IPlaylist from '../models/playlist.interface';
+import FiltersService from '../services/filters.service';
 import PlaylistsService from '../services/playlists.service';
 import YTDLService from '../services/ytdl.service';
 import YTPLService from '../services/ytpl.service';
-import IPlaylist from '../controllers/playlists/playlist.interface';
-import ColoursService from '../services/colours.service';
-import FiltersService from '../services/filters.service';
-import SongsRepository from './songs.repository';
 import ImportPlaylistViewModel from '../view-models/import-playlist.view-model';
+import PlaylistViewModel from '../view-models/playlist.view-model';
+import SongsRepository from './songs.repository';
 
 export default class PlaylistsRepository {
   public static getAudioStream(url: string): Readable {
@@ -29,7 +28,7 @@ export default class PlaylistsRepository {
         replaceAll: false,
         filters: [],
         thumbnail: item.bestThumbnail.url ?? '',
-        colour: { r: 1, g: 1, b: 1 }
+        colour: '#FFFFFF'
       };
       await SongsRepository.addSong(songModel);
       return item.id;
@@ -41,7 +40,7 @@ export default class PlaylistsRepository {
       thumbnail: playlist.bestThumbnail.url ?? '',
       songs,
       filters: model.filters ?? [],
-      colour: model.colour ?? { r: 1, g: 1, b: 1 },
+      colour: model.colour ?? 'FFFFFF',
       loop: model.loop,
       shuffle: model.shuffle,
       replaceAll: model.replaceAll
@@ -49,10 +48,6 @@ export default class PlaylistsRepository {
   }
 
   public static async addPlaylist(model: IPlaylist): Promise<IPlaylist | null> {
-    if (!ColoursService.validateColor(model.colour)) {
-      return Promise.reject('Colour values not within the range [0-1]');
-    }
-
     if (!(await FiltersService.validateFilters(model.filters))) {
       return Promise.reject('Invalid filters');
     }
@@ -127,10 +122,6 @@ export default class PlaylistsRepository {
   }
 
   public static async updatePlaylist(id: string, model: IPlaylist): Promise<IPlaylist | null> {
-    if (!ColoursService.validateColor(model.colour)) {
-      return Promise.reject('Colour values not within the range [0-1]');
-    }
-
     if (!(await FiltersService.validateFilters(model.filters))) {
       return Promise.reject('Invalid filters');
     }

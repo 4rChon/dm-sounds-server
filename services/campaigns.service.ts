@@ -1,5 +1,6 @@
-import ICampaign from "../controllers/campaigns/campaign.interface";
-import campaignModel from "../models/campaign.model";
+import ICampaignModel from "../mongodb/interfaces/campaign.model.interface";
+import campaignModel from "../mongodb/models/campaign.model";
+import ICampaign from "../models/campaign.interface";
 
 export default class CampaignsService {
   public static async addCampaign(campaign: ICampaign): Promise<ICampaign | null> {

@@ -1,5 +1,4 @@
-import IColour from '../controllers/colours/colour.interface';
-import IFilter from '../controllers/filters/filter.interface';
+import IFilter from "../models/filter.interface";
 
 export default interface SongViewModel {
   id: string;
@@ -7,5 +6,5 @@ export default interface SongViewModel {
   replaceAll: boolean;
   name: string;
   filters: Array<IFilter>;
-  colour: IColour;
+  colour: string;
 }

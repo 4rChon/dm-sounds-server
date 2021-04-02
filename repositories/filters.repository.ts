@@ -1,14 +1,9 @@
-import IFilter from '../controllers/filters/filter.interface';
-import ColoursService from '../services/colours.service';
+import IFilter from '../models/filter.interface';
 import FiltersService from '../services/filters.service';
 
 export default class FiltersRepository {
-  public static async addFilter(model: IFilter): Promise<IFilter | null> {
-    if (ColoursService.validateColor(model.colour)) {
-      return FiltersService.addFilter(model);
-    }
-
-    return Promise.reject();
+  public static async addFilter(model: IFilter): Promise<IFilter | null | undefined> {
+    return FiltersService.addFilter(model);
   }
 
   public static async getFilters(): Promise<Array<IFilter>> {

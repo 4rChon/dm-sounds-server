@@ -1,10 +1,20 @@
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { Server } from 'http';
 import mongoose, { Connection } from 'mongoose';
 import HttpException from './exceptions/http.exception';
+
+mongoose.plugin(schema => {
+  schema.pre('findOneAndUpdate', setRunValidators);
+  schema.pre('updateMany', setRunValidators);
+  schema.pre('updateOne', setRunValidators);
+  schema.pre('update', setRunValidators);
+});
+
+function setRunValidators(this: any) {
+  this.setOptions({ runValidators: true });
+}
 
 function loggerMiddleware(req: Request, res: Response, next: NextFunction) {
   console.log(`${req.method} ${req.path}`);

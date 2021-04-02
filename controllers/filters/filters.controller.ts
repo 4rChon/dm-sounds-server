@@ -1,7 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
 import DuplicateFilterException from '../../exceptions/duplicate-filter.exception';
-import InvalidColourException from '../../exceptions/invalid-color.exception';
+import ErrorHandling from '../../exceptions/handle-exception';
+import HttpException from '../../exceptions/http.exception';
 import FiltersRepository from '../../repositories/filters.repository';
 import IController from '../controller.interface';
 
@@ -17,56 +18,69 @@ export default class FiltersController implements IController {
     this.router.delete(`${this.path}/:name`, this.removeFilter);
   }
 
-  addFilter = (req: Request, res: Response, next: NextFunction) => {
-    FiltersRepository.addFilter(req.body)
-      .then(result => {
-        if (result) {
-          next(new DuplicateFilterException());
-        } else {
-          res.status(200).send({ message: 'Filter added' })
-        }
-      }).catch(() => {
-        next(new InvalidColourException());
-      });
+  addFilter = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await FiltersRepository.addFilter(req.body);
+      console.log(result);
+      if (result) {
+        next(new DuplicateFilterException());
+      } else {
+        res.status(200).send({ message: 'Filter added' })
+      }
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    };
   }
 
-  getFilter = (req: Request, res: Response, next: NextFunction) => {
-    FiltersRepository.getFilter(req.params.name).then(filter => {
+  getFilter = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const filter = await FiltersRepository.getFilter(req.params.name)
       if (filter) {
         res.send(filter);
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  getFilters = (req: Request, res: Response, next: NextFunction) => {
-    FiltersRepository.getFilters().then(filters => {
+  getFilters = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const filters = await FiltersRepository.getFilters()
       if (filters) {
         res.send(filters);
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  removeFilter = (req: Request, res: Response, next: NextFunction) => {
-    FiltersRepository.removeFilter(req.params.name).then(filter => {
+  removeFilter = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const filter = await FiltersRepository.removeFilter(req.params.name);
       if (filter) {
         res.send(filter);
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  updateFilter = (req: Request, res: Response, next: NextFunction) => {
-    FiltersRepository.updateFilter(req.body.name, req.body).then(filter => {
+  updateFilter = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const filter = await FiltersRepository.updateFilter(req.body.name, req.body)
       if (filter) {
         res.send(filter);
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 }

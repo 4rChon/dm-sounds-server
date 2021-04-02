@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
 import DuplicateSongException from '../../exceptions/duplicate-song.exception';
-import HttpException from '../../exceptions/http.exception';
+import ErrorHandling from '../../exceptions/handle-exception';
 import SongsRepository from '../../repositories/songs.repository';
 import IController from '../controller.interface';
 
@@ -17,58 +17,68 @@ export default class SongsController implements IController {
     this.router.delete(`${this.path}/:id`, this.removeSong);
   }
 
-  addSong = (req: Request, res: Response, next: NextFunction) => {
-    SongsRepository.addSong(req.body)
-      .then(result => {
-        if (result) {
-          next(new DuplicateSongException());
-        } else {
-          res.status(200).send({ message: 'Song added' });
-        }
-      }).catch(reason => {
-        next(new HttpException(400, reason));
-      });
+  addSong = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await SongsRepository.addSong(req.body)
+      if (result) {
+        next(new DuplicateSongException());
+      } else {
+        res.status(200).send({ message: 'Song added' });
+      }
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  getSong = (req: Request, res: Response, next: NextFunction) => {
-    SongsRepository.getSong(req.params.id).then(song => {
+  getSong = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const song = SongsRepository.getSong(req.params.id);
       if (song) {
         res.send(song);
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  getSongs = (req: Request, res: Response, next: NextFunction) => {
-    SongsRepository.getSongs().then(songs => {
+  getSongs = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const songs = SongsRepository.getSongs();
       if (songs) {
         res.send(songs);
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  removeSong = (req: Request, res: Response, next: NextFunction) => {
-    SongsRepository.removeSong(req.params.id).then(song => {
+  removeSong = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const song = SongsRepository.removeSong(req.params.id);
       if (song) {
         res.send(song);
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  updateSong = (req: Request, res: Response, next: NextFunction) => {
-    SongsRepository.updateSong(req.body.id, req.body).then(song => {
+  updateSong = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const song = SongsRepository.updateSong(req.body.id, req.body);
       if (song) {
         res.send(song);
       } else {
         next(new DatabaseException());
       }
-    }).catch(reason => {
-      next(new HttpException(400, reason));
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 }

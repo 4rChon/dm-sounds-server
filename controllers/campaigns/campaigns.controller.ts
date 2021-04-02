@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
 import DuplicateCampaignException from '../../exceptions/duplicate-campaign.exception';
+import ErrorHandling from '../../exceptions/handle-exception';
 import HttpException from '../../exceptions/http.exception';
 import CampaignsRepository from '../../repositories/campaigns.repository';
 import IController from '../controller.interface';
@@ -18,66 +19,81 @@ export default class CampaignsController implements IController {
     this.router.delete(`${this.path}/:id`, this.removeCampaign);
   }
 
-  addCampaign = (req: Request, res: Response, next: NextFunction) => {
-    CampaignsRepository.addCampaign(req.body)
-      .then(result => {
-        if (result) {
-          next(new DuplicateCampaignException());
-        } else {
-          res.status(200).send({ message: 'Campaign added' })
-        }
-      });
+  addCampaign = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = CampaignsRepository.addCampaign(req.body);
+      if (result) {
+        next(new DuplicateCampaignException());
+      } else {
+        res.status(200).send({ message: 'Campaign added' })
+      }
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  getCampaign = (req: Request, res: Response, next: NextFunction) => {
-    CampaignsRepository.getCampaign(req.params.id).then(campaign => {
+  getCampaign = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const campaign = await CampaignsRepository.getCampaign(req.params.id)
       if (campaign) {
         res.send(campaign);
       } else {
         next(new DatabaseException());
       }
-    }).catch((reason) => {
-      next(new HttpException(400, reason));
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  getCampaigns = (req: Request, res: Response, next: NextFunction) => {
-    CampaignsRepository.getCampaigns().then(campaigns => {
+  getCampaigns = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const campaigns = await CampaignsRepository.getCampaigns();
       if (campaigns !== undefined) {
         res.send(campaigns);
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  getCampaignNames = (req: Request, res: Response, next: NextFunction) => {
-    CampaignsRepository.getCampaignNames().then(campaigns => {
+  getCampaignNames = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const campaigns = await CampaignsRepository.getCampaignNames();
       if (campaigns !== undefined) {
         res.send(campaigns);
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  removeCampaign = (req: Request, res: Response, next: NextFunction) => {
-    CampaignsRepository.removeCampaign(req.params.id).then(campaign => {
+  removeCampaign = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const campaign = CampaignsRepository.removeCampaign(req.params.id);
       if (campaign) {
         res.status(200).send({ message: 'Campaign removed!', data: campaign });
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 
-  updateCampaign = (req: Request, res: Response, next: NextFunction) => {
-    CampaignsRepository.updateCampaign(req.body.id, req.body).then(campaign => {
+  updateCampaign = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const campaign = await CampaignsRepository.updateCampaign(req.body.id, req.body);
       if (campaign) {
         res.status(200).send({ message: 'Campaign updated!', data: campaign });
       } else {
         next(new DatabaseException());
       }
-    });
+    } catch (error) {
+      ErrorHandling.handle(next, error);
+    }
   }
 }

@@ -1,4 +1,3 @@
-import ICampaign from "../controllers/campaigns/campaign.interface";
 import CampaignsService from "../services/campaigns.service";
 import CampaignViewModel from "../view-models/campaign.view-model";
 import PlaylistsRepository from "./playlists.repository";
@@ -7,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import PlaylistsService from "../services/playlists.service";
 import SongsService from "../services/songs.service";
 import CampaignNameViewModel from "../view-models/campaign-name.view-model";
+import ICampaign from "../models/campaign.interface";
 
 export default class CampaignsRepository {
   public static async addCampaign(model: ICampaign): Promise<ICampaign | null> {

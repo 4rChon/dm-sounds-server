@@ -1,5 +1,5 @@
-import ISong from "../controllers/songs/song.interface";
-import songModel from "../models/song.model";
+import ISong from "../models/song.interface";
+import songModel from "../mongodb/models/song.model";
 
 export default class SongsService {
   public static async addSong(song: ISong): Promise<ISong | null> {

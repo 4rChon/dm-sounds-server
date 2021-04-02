@@ -1,5 +1,5 @@
-import IPlaylist from '../controllers/playlists/playlist.interface';
-import playlistModel from '../models/playlist.model';
+import IPlaylist from "../models/playlist.interface";
+import playlistModel from "../mongodb/models/playlist.model";
 
 export default class PlaylistsService {
   public static async addPlaylist(playlist: IPlaylist): Promise<IPlaylist | null> {

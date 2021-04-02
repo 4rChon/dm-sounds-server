@@ -1,9 +1,7 @@
-import IColour from "../controllers/colours/colour.interface";
-
 export default interface ImportPlaylistViewModel {
   id: string;
   filters: Array<string>;
-  colour: IColour;
+  colour: string;
   loop: boolean;
   shuffle: boolean;
   replaceAll: boolean;
