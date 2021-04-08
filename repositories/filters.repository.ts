@@ -1,8 +1,10 @@
+import { v4 as uuidv4 } from 'uuid';
 import IFilter from '../models/filter.interface';
 import FiltersService from '../services/filters.service';
 
 export default class FiltersRepository {
   public static async addFilter(model: IFilter): Promise<IFilter | null | undefined> {
+    model.id = uuidv4();
     return FiltersService.addFilter(model);
   }
 
@@ -10,15 +12,15 @@ export default class FiltersRepository {
     return FiltersService.getFilters();
   }
 
-  public static async getFilter(name: string): Promise<IFilter | null> {
-    return FiltersService.getFilter(name);
+  public static async getFilter(id: string): Promise<IFilter | null> {
+    return FiltersService.getFilter(id);
   }
 
-  public static async removeFilter(name: string): Promise<IFilter | null> {
-    return FiltersService.removeFilter(name);
+  public static async removeFilter(id: string): Promise<IFilter | null> {
+    return FiltersService.removeFilter(id);
   }
 
-  public static async updateFilter(name: string, filter: IFilter): Promise<IFilter | null> {
-    return FiltersService.updateFilter(name, filter);
+  public static async updateFilter(id: string, filter: IFilter): Promise<IFilter | null> {
+    return FiltersService.updateFilter(id, filter);
   }
 }

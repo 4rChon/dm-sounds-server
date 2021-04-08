@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
 import DuplicateFilterException from '../../exceptions/duplicate-filter.exception';
 import ErrorHandling from '../../exceptions/handle-exception';
-import HttpException from '../../exceptions/http.exception';
 import FiltersRepository from '../../repositories/filters.repository';
 import IController from '../controller.interface';
 
@@ -12,16 +11,15 @@ export default class FiltersController implements IController {
 
   constructor() {
     this.router.post(this.path, this.addFilter);
-    this.router.get(`${this.path}/get-single/:name`, this.getFilter);
+    this.router.get(`${this.path}/get-single/:id`, this.getFilter);
     this.router.get(this.path, this.getFilters);
     this.router.put(this.path, this.updateFilter);
-    this.router.delete(`${this.path}/:name`, this.removeFilter);
+    this.router.delete(`${this.path}/:id`, this.removeFilter);
   }
 
   addFilter = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await FiltersRepository.addFilter(req.body);
-      console.log(result);
       if (result) {
         next(new DuplicateFilterException());
       } else {
@@ -34,7 +32,7 @@ export default class FiltersController implements IController {
 
   getFilter = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const filter = await FiltersRepository.getFilter(req.params.name)
+      const filter = await FiltersRepository.getFilter(req.params.id)
       if (filter) {
         res.send(filter);
       } else {
@@ -60,7 +58,7 @@ export default class FiltersController implements IController {
 
   removeFilter = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const filter = await FiltersRepository.removeFilter(req.params.name);
+      const filter = await FiltersRepository.removeFilter(req.params.id);
       if (filter) {
         res.send(filter);
       } else {
@@ -73,7 +71,7 @@ export default class FiltersController implements IController {
 
   updateFilter = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const filter = await FiltersRepository.updateFilter(req.body.name, req.body)
+      const filter = await FiltersRepository.updateFilter(req.body.id, req.body)
       if (filter) {
         res.send(filter);
       } else {

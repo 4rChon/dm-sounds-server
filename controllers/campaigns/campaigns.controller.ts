@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
 import DuplicateCampaignException from '../../exceptions/duplicate-campaign.exception';
 import ErrorHandling from '../../exceptions/handle-exception';
-import HttpException from '../../exceptions/http.exception';
 import CampaignsRepository from '../../repositories/campaigns.repository';
 import IController from '../controller.interface';
 

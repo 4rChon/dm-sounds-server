@@ -4,7 +4,7 @@ import filterModel from "../mongodb/models/filter.model";
 export default class FiltersService {
   public static async addFilter(filter: IFilter): Promise<IFilter | undefined | null> {
     return filterModel.findOneAndUpdate(
-      { name: filter.name }, filter, { upsert: true }
+      { id: filter.id }, filter, { upsert: true }
     ).lean().exec();
   }
 
@@ -12,16 +12,16 @@ export default class FiltersService {
     return filterModel.find().lean().exec();
   }
 
-  public static async getFilter(name: string): Promise<IFilter | null> {
-    return filterModel.findOne({ name }).lean().exec();
+  public static async getFilter(id: string): Promise<IFilter | null> {
+    return filterModel.findOne({ id }).lean().exec();
   }
 
-  public static async removeFilter(name: string): Promise<IFilter | null> {
-    return filterModel.findOneAndDelete({ name }).lean().exec();
+  public static async removeFilter(id: string): Promise<IFilter | null> {
+    return filterModel.findOneAndDelete({ id }).lean().exec();
   }
 
-  public static async updateFilter(name: string, filter: IFilter): Promise<IFilter | null> {
-    return filterModel.findOneAndUpdate({ name }, filter, { new: true }).lean().exec();
+  public static async updateFilter(id: string, filter: IFilter): Promise<IFilter | null> {
+    return filterModel.findOneAndUpdate({ id }, filter, { new: true }).lean().exec();
   }
 
   public static async getFiltersByNames(names: Array<string>): Promise<Array<IFilter>> {

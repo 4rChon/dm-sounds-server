@@ -3,9 +3,14 @@ import IFilterModel from "../interfaces/filter.model.interface";
 import Validators from "../validators/validators";
 
 export const filterSchema = new Schema({
-  name: {
+  id: {
     type: String,
     unique: true
+  },
+  name: {
+    type: String,
+    unique: true,
+    required: true
   },
   colour: {
     type: String,
