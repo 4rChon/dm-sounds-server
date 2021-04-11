@@ -5,7 +5,7 @@ import { SongViewModel } from "../view-models/song.view-model";
 
 export default class SongsRepository {
   public static async importSong(song: SongModel): Promise<SongViewModel | null> {
-    const ytVideoInfo = await YTDLService.getBasicInfo(song.song_id);
+    const ytVideoInfo = await YTDLService.getBasicInfo(song.songId);
     const thumbnails = ytVideoInfo.player_response.videoDetails.thumbnail.thumbnails;
     song.thumbnail = thumbnails[0]?.url ?? '';
 

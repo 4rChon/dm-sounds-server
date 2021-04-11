@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
-import DuplicateSongException from '../../exceptions/duplicate-song.exception';
 import ErrorHandling from '../../exceptions/handle-exception';
 import SongsRepository from '../../repositories/songs.repository';
 import IController from '../controller.interface';
@@ -55,11 +54,7 @@ export default class SongsController implements IController {
   removeSong = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const song = await SongsRepository.removeSong(req.params.id);
-      if (song) {
-        res.send(song);
-      } else {
-        next(new DatabaseException());
-      }
+      res.send(song);
     } catch (error) {
       ErrorHandling.handle(next, error);
     }

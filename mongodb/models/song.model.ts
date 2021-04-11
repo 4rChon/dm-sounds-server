@@ -4,7 +4,7 @@ import { FilterDocument, FilterLean } from "./filter.model";
 
 export interface SongLean {
   _id?: string;
-  song_id: string;
+  songId: string;
   name: string;
   loop: boolean;
   replaceAll: boolean;
@@ -14,7 +14,7 @@ export interface SongLean {
 }
 
 export interface SongDocument extends Document {
-  song_id: string;
+  songId: string;
   name: string;
   loop: boolean;
   replaceAll: boolean;
@@ -24,7 +24,7 @@ export interface SongDocument extends Document {
 }
 
 export const songSchema = new Schema({
-  song_id: {
+  songId: {
     type: String,
     unique: true,
     required: true,

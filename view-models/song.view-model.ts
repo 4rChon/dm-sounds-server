@@ -2,7 +2,7 @@ import { FilterViewModel } from "./filter.view-model";
 
 export interface SongViewModel {
   _id?: string;
-  song_id: string;
+  songId: string;
   name: string;
   loop: boolean;
   replaceAll: boolean;

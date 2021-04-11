@@ -13,14 +13,14 @@ export default class PlaylistsRepository {
   }
 
   public static async importPlaylist(model: ImportPlaylistViewModel): Promise<PlaylistViewModel | null> {
-    if (!YTPLService.validateID(model.playlist_id)) {
+    if (!YTPLService.validateID(model.playlistId)) {
       return Promise.reject('Invalid playlist ID');
     }
 
-    const playlist = await YTPLService.getPlaylist(model.playlist_id);
+    const playlist = await YTPLService.getPlaylist(model.playlistId);
     const songs = await Promise.all(playlist.items.map(async item => {
       const songModel = {
-        song_id: item.id,
+        songId: item.id,
         name: item.title,
         loop: false,
         replaceAll: false,
@@ -31,16 +31,18 @@ export default class PlaylistsRepository {
       return (await SongsRepository.importSong(songModel))?._id;
     }));
 
-    return await PlaylistsService.addPlaylist({
+    const playlistModel: PlaylistModel = {
       name: playlist.title,
       thumbnail: playlist.bestThumbnail.url ?? '',
       songs,
       filters: model.filters ?? [],
-      colour: model.colour ?? 'FFFFFF',
+      colour: model.colour ?? '#FFF',
       loop: model.loop,
       shuffle: model.shuffle,
       replaceAll: model.replaceAll
-    });
+    };
+
+    return await PlaylistsService.addPlaylist(playlistModel);
   }
 
   public static async addPlaylist(model: PlaylistModel): Promise<PlaylistViewModel | null> {

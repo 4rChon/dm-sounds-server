@@ -10,7 +10,7 @@ export default class PlaylistsController implements IController {
   public router = express.Router();
 
   constructor() {
-    this.router.post(this.path, this.addPlaylist);
+    this.router.post(`${this.path}/create`, this.addPlaylist);
     this.router.post(`${this.path}/import`, this.importPlaylist);
     this.router.get(this.path, this.getPlaylists);
     this.router.get(`${this.path}/get-single/:id`, this.getPlaylist);
@@ -21,11 +21,7 @@ export default class PlaylistsController implements IController {
   addPlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await PlaylistsRepository.addPlaylist(req.body);
-      if (result) {
-        next(new DuplicatePlaylistException());
-      } else {
-        res.status(200).send({ message: 'Playlist added' })
-      }
+      res.status(200).send(result)
     } catch (error) {
       ErrorHandling.handle(next, error);
     }
@@ -34,11 +30,7 @@ export default class PlaylistsController implements IController {
   importPlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await PlaylistsRepository.importPlaylist(req.body);
-      if (result) {
-        next(new DuplicatePlaylistException());
-      } else {
-        res.status(200).send({ message: 'Playlist added' })
-      }
+      res.status(200).send(result)
     } catch (error) {
       ErrorHandling.handle(next, error);
     }
@@ -47,11 +39,7 @@ export default class PlaylistsController implements IController {
   getPlaylists = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const playlists = await PlaylistsRepository.getPlaylists();
-      if (playlists) {
-        res.send(playlists)
-      } else {
-        next(new DatabaseException());
-      }
+      res.send(playlists)
     } catch (error) {
       ErrorHandling.handle(next, error);
     }
@@ -60,11 +48,7 @@ export default class PlaylistsController implements IController {
   getPlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const playlist = await PlaylistsRepository.getPlaylist(req.params.id);
-      if (playlist) {
-        res.send(playlist);
-      } else {
-        next(new DatabaseException());
-      }
+      res.send(playlist);
     } catch (error) {
       ErrorHandling.handle(next, error);
     }
@@ -73,11 +57,7 @@ export default class PlaylistsController implements IController {
   updatePlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const playlist = await PlaylistsRepository.updatePlaylist(req.body);
-      if (playlist) {
-        res.send(playlist);
-      } else {
-        next(new DatabaseException());
-      }
+      res.send(playlist);
     } catch (error) {
       ErrorHandling.handle(next, error);
     }
@@ -86,11 +66,7 @@ export default class PlaylistsController implements IController {
   removePlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const playlist = await PlaylistsRepository.removePlaylist(req.params.id);
-      if (playlist) {
-        res.send(playlist);
-      } else {
-        next(new DatabaseException());
-      }
+      res.send(playlist);
     } catch (error) {
       ErrorHandling.handle(next, error);
     }

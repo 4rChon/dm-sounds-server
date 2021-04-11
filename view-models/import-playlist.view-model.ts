@@ -1,7 +1,7 @@
 import { FilterViewModel } from './filter.view-model';
 
 export interface ImportPlaylistViewModel {
-  playlist_id: string;
+  playlistId: string;
   name: string;
   thumbnail: string;
   filters: Array<FilterViewModel['_id']>;
