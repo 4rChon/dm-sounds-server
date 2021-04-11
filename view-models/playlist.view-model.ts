@@ -1,14 +1,14 @@
-import IFilter from '../models/filter.interface';
-import SongViewModel from './song.view-model';
+import { FilterViewModel } from './filter.view-model';
+import { SongViewModel } from './song.view-model';
 
-export default interface PlaylistViewModel {
-  id: string;
+export interface PlaylistViewModel {
+  _id?: string;
   name: string;
   thumbnail: string;
   songs: Array<SongViewModel>;
-  filters: Array<IFilter>;
+  filters: Array<FilterViewModel>;
   colour: string;
-  shuffle: boolean;
   loop: boolean;
+  shuffle: boolean;
   replaceAll: boolean;
 }

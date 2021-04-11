@@ -1,30 +1,26 @@
-import IPlaylist from "../models/playlist.interface";
-import playlistModel from "../mongodb/models/playlist.model";
+import { PlaylistModel } from "../models/playlist.interface";
+import playlistModel, { PlaylistLean } from "../mongodb/models/playlist.model";
 
 export default class PlaylistsService {
-  public static async addPlaylist(playlist: IPlaylist): Promise<IPlaylist | null> {
+  public static async addPlaylist(playlist: PlaylistModel): Promise<PlaylistLean | null> {
+    return playlistModel.create(playlist);
+  }
+
+  public static async updatePlaylist(playlist: PlaylistModel): Promise<PlaylistLean | null> {
     return playlistModel.findOneAndUpdate(
-      { id: playlist.id }, playlist, { upsert: true }
-    ).exec();
+      { _id: playlist._id }, playlist, { new: true }
+    ).lean().exec();
   }
 
-  public static async getPlaylists(): Promise<Array<IPlaylist>> {
-    return playlistModel.find().exec();
+  public static async getPlaylists(): Promise<Array<PlaylistLean>> {
+    return playlistModel.find().lean().exec();
   }
 
-  public static async getPlaylistsByIDs(ids: Array<string>): Promise<Array<IPlaylist>> {
-    return playlistModel.find().where('id').in(ids).exec();
+  public static async getPlaylist(id: string): Promise<PlaylistLean | null> {
+    return playlistModel.findOne({ _id: id }).lean().exec();
   }
 
-  public static async getPlaylist(id: string): Promise<IPlaylist | null> {
-    return playlistModel.findOne({ id }).exec();
-  }
-
-  public static async removePlaylist(id: string): Promise<IPlaylist | null> {
-    return playlistModel.findOneAndDelete({ id }).exec();
-  }
-
-  public static async updatePlaylist(id: string, playlist: IPlaylist): Promise<IPlaylist | null> {
-    return playlistModel.findOneAndUpdate({ id }, playlist, { new: true }).exec();
+  public static async removePlaylist(id: string): Promise<PlaylistLean | null> {
+    return playlistModel.findOneAndDelete({ _id: id }).lean().exec();
   }
 }

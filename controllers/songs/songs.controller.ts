@@ -10,21 +10,17 @@ export default class SongsController implements IController {
   public router = express.Router();
 
   constructor() {
-    this.router.post(this.path, this.addSong);
+    this.router.post(`${this.path}/import`, this.importSong);
     this.router.get(this.path, this.getSongs);
     this.router.get(`${this.path}/get-single/:id`, this.getSong);
     this.router.put(`${this.path}`, this.updateSong);
     this.router.delete(`${this.path}/:id`, this.removeSong);
   }
 
-  addSong = async (req: Request, res: Response, next: NextFunction) => {
+  importSong = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await SongsRepository.addSong(req.body)
-      if (result) {
-        next(new DuplicateSongException());
-      } else {
-        res.status(200).send({ message: 'Song added' });
-      }
+      const result = await SongsRepository.importSong(req.body)
+      res.status(200).send(result);
     } catch (error) {
       ErrorHandling.handle(next, error);
     }
@@ -71,7 +67,7 @@ export default class SongsController implements IController {
 
   updateSong = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const song = await SongsRepository.updateSong(req.body.id, req.body);
+      const song = await SongsRepository.updateSong(req.body);
       if (song) {
         res.send(song);
       } else {

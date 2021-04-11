@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
-import DuplicateFilterException from '../../exceptions/duplicate-filter.exception';
 import ErrorHandling from '../../exceptions/handle-exception';
 import FiltersRepository from '../../repositories/filters.repository';
 import IController from '../controller.interface';
@@ -20,11 +19,7 @@ export default class FiltersController implements IController {
   addFilter = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await FiltersRepository.addFilter(req.body);
-      if (result) {
-        next(new DuplicateFilterException());
-      } else {
-        res.status(200).send({ message: 'Filter added' })
-      }
+      res.status(200).send(result)
     } catch (error) {
       ErrorHandling.handle(next, error);
     };
@@ -71,7 +66,7 @@ export default class FiltersController implements IController {
 
   updateFilter = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const filter = await FiltersRepository.updateFilter(req.body.id, req.body)
+      const filter = await FiltersRepository.updateFilter(req.body)
       if (filter) {
         res.send(filter);
       } else {

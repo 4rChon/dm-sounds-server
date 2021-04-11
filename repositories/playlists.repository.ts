@@ -1,12 +1,10 @@
 import { Readable } from 'stream';
-import { v4 as uuidv4 } from 'uuid';
-import IPlaylist from '../models/playlist.interface';
-import FiltersService from '../services/filters.service';
+import { PlaylistModel } from '../models/playlist.interface';
 import PlaylistsService from '../services/playlists.service';
 import YTDLService from '../services/ytdl.service';
 import YTPLService from '../services/ytpl.service';
-import ImportPlaylistViewModel from '../view-models/import-playlist.view-model';
-import PlaylistViewModel from '../view-models/playlist.view-model';
+import { ImportPlaylistViewModel } from '../view-models/import-playlist.view-model';
+import { PlaylistViewModel } from '../view-models/playlist.view-model';
 import SongsRepository from './songs.repository';
 
 export default class PlaylistsRepository {
@@ -14,28 +12,26 @@ export default class PlaylistsRepository {
     return YTDLService.getAudioStream(url);
   }
 
-  public static async importPlaylist(model: ImportPlaylistViewModel): Promise<IPlaylist | null> {
-    if (!YTPLService.validatePlaylist(model.id)) {
+  public static async importPlaylist(model: ImportPlaylistViewModel): Promise<PlaylistViewModel | null> {
+    if (!YTPLService.validateID(model.playlist_id)) {
       return Promise.reject('Invalid playlist ID');
     }
 
-    const playlist = await YTPLService.getPlaylist(model.id);
+    const playlist = await YTPLService.getPlaylist(model.playlist_id);
     const songs = await Promise.all(playlist.items.map(async item => {
       const songModel = {
-        id: item.id,
+        song_id: item.id,
         name: item.title,
         loop: false,
         replaceAll: false,
         filters: [],
         thumbnail: item.bestThumbnail.url ?? '',
-        colour: '#FFFFFF'
+        colour: '#FFF'
       };
-      await SongsRepository.addSong(songModel);
-      return item.id;
+      return (await SongsRepository.importSong(songModel))?._id;
     }));
 
     return await PlaylistsService.addPlaylist({
-      id: uuidv4(),
       name: playlist.title,
       thumbnail: playlist.bestThumbnail.url ?? '',
       songs,
@@ -47,85 +43,23 @@ export default class PlaylistsRepository {
     });
   }
 
-  public static async addPlaylist(model: IPlaylist): Promise<IPlaylist | null> {
-    if (!(await FiltersService.validateFilters(model.filters))) {
-      return Promise.reject('Invalid filters');
-    }
-
-    model.id = uuidv4();
+  public static async addPlaylist(model: PlaylistModel): Promise<PlaylistViewModel | null> {
     return PlaylistsService.addPlaylist(model);
   }
 
   public static async getPlaylists(): Promise<Array<PlaylistViewModel>> {
-    const playlists = await PlaylistsService.getPlaylists();
-
-    return await Promise.all(playlists.map(async (playlist) => {
-      const filters = await FiltersService.getFiltersByNames(playlist.filters);
-      const songs = await SongsRepository.getSongsByIDs(playlist.songs);
-      return {
-        id: playlist.id,
-        name: playlist.name,
-        thumbnail: playlist.thumbnail,
-        songs,
-        filters,
-        colour: playlist.colour,
-        shuffle: playlist.shuffle,
-        loop: playlist.loop,
-        replaceAll: playlist.replaceAll
-      };
-    }));
-  }
-
-  public static async getPlaylistsByIDs(ids: Array<string>): Promise<Array<PlaylistViewModel>> {
-    const playlists = await PlaylistsService.getPlaylistsByIDs(ids);
-
-    return await Promise.all(playlists.map(async (playlist) => {
-      const filters = await FiltersService.getFiltersByNames(playlist.filters);
-      const songs = await SongsRepository.getSongsByIDs(playlist.songs);
-      return {
-        id: playlist.id,
-        name: playlist.name,
-        thumbnail: playlist.thumbnail,
-        songs,
-        filters,
-        colour: playlist.colour,
-        shuffle: playlist.shuffle,
-        loop: playlist.loop,
-        replaceAll: playlist.replaceAll
-      };
-    }));
+    return PlaylistsService.getPlaylists();
   }
 
   public static async getPlaylist(id: string): Promise<PlaylistViewModel | null> {
-    const playlist = await PlaylistsService.getPlaylist(id);
-    if (!playlist) {
-      return Promise.reject('Playlist not found');
-    }
-
-    const filters = await FiltersService.getFiltersByNames(playlist.filters);
-    const songs = await SongsRepository.getSongsByIDs(playlist.songs);
-    return {
-      id: playlist.id,
-      name: playlist.name,
-      thumbnail: playlist.thumbnail,
-      songs,
-      filters,
-      colour: playlist.colour,
-      shuffle: playlist.shuffle,
-      loop: playlist.loop,
-      replaceAll: playlist.replaceAll
-    };
+    return PlaylistsService.getPlaylist(id);
   }
 
-  public static async removePlaylist(id: string): Promise<IPlaylist | null> {
+  public static async removePlaylist(id: string): Promise<PlaylistViewModel | null> {
     return PlaylistsService.removePlaylist(id);
   }
 
-  public static async updatePlaylist(id: string, model: IPlaylist): Promise<IPlaylist | null> {
-    if (!(await FiltersService.validateFilters(model.filters))) {
-      return Promise.reject('Invalid filters');
-    }
-
-    return PlaylistsService.updatePlaylist(id, model);
+  public static async updatePlaylist(model: PlaylistModel): Promise<PlaylistViewModel | null> {
+    return PlaylistsService.updatePlaylist(model);
   }
 }

@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
 import DuplicatePlaylistException from '../../exceptions/duplicate-playlist.exception';
 import ErrorHandling from '../../exceptions/handle-exception';
-import HttpException from '../../exceptions/http.exception';
 import PlaylistsRepository from '../../repositories/playlists.repository';
 import IController from '../controller.interface';
 
@@ -73,7 +72,7 @@ export default class PlaylistsController implements IController {
 
   updatePlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const playlist = await PlaylistsRepository.updatePlaylist(req.body.id, req.body);
+      const playlist = await PlaylistsRepository.updatePlaylist(req.body);
       if (playlist) {
         res.send(playlist);
       } else {

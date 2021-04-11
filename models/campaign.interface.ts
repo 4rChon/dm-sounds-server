@@ -1,9 +1,9 @@
-import IPlaylist from './playlist.interface';
-import ISong from './song.interface';
+import { PlaylistModel } from './playlist.interface';
+import { SongModel } from './song.interface';
 
-export default interface ICampaign {
-  id: string;
+export interface CampaignModel {
+  _id?: string;
   name: string;
-  playlists: Array<IPlaylist['id']>;
-  songs: Array<ISong['id']>;
+  playlists: Array<PlaylistModel['_id']>;
+  songs: Array<SongModel['_id']>;
 }

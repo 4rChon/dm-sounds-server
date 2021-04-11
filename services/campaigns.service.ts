@@ -1,27 +1,44 @@
-import ICampaignModel from "../mongodb/interfaces/campaign.model.interface";
-import campaignModel from "../mongodb/models/campaign.model";
-import ICampaign from "../models/campaign.interface";
+import { CampaignModel } from "../models/campaign.interface";
+import campaignModel, { CampaignLean } from "../mongodb/models/campaign.model";
 
 export default class CampaignsService {
-  public static async addCampaign(campaign: ICampaign): Promise<ICampaign | null> {
+  public static async addCampaign(campaign: CampaignModel): Promise<CampaignLean | null> {
+    return campaignModel.create(campaign);
+  }
+
+  public static async updateCampaign(campaign: CampaignModel): Promise<CampaignLean | null> {
     return campaignModel.findOneAndUpdate(
-      { id: campaign.id }, campaign, { upsert: true }
-    ).exec();
+      { _id: campaign._id }, campaign, { new: true }
+    ).populate({
+      path: 'songs playlists',
+      populate: {
+        path: 'filters songs',
+        populate: 'filters'
+      }
+    }).lean().exec();
   }
 
-  public static async getCampaigns(): Promise<Array<ICampaign>> {
-    return campaignModel.find().exec();
+  public static async getCampaigns(): Promise<Array<CampaignLean>> {
+    return campaignModel.find().populate({
+      path: 'songs playlists',
+      populate: {
+        path: 'filters songs',
+        populate: 'filters'
+      }
+    }).lean().exec();
   }
 
-  public static async getCampaign(id: string): Promise<ICampaign | null> {
-    return campaignModel.findOne({ id }).exec();
+  public static async getCampaign(id: string): Promise<CampaignLean | null> {
+    return campaignModel.findOne({ _id: id }).populate({
+      path: 'songs playlists',
+      populate: {
+        path: 'filters songs',
+        populate: 'filters'
+      }
+    }).lean().exec();
   }
 
-  public static async removeCampaign(id: string): Promise<ICampaign | null> {
-    return campaignModel.findOneAndDelete({ id }).exec();
-  }
-
-  public static async updateCampaign(id: string, campaign: ICampaign): Promise<ICampaign | null> {
-    return campaignModel.findOneAndUpdate({ id }, campaign, { new: true }).exec();
+  public static async removeCampaign(id: string): Promise<CampaignLean | null> {
+    return campaignModel.findOneAndDelete({ _id: id }).lean().exec();
   }
 }

@@ -1,11 +1,12 @@
-import IFilter from './filter.interface';
+import { FilterModel } from './filter.interface';
 
-export default interface ISong {
-  id: string;
+export interface SongModel {
+  _id?: string;
+  song_id: string;
   name: string;
   loop: boolean;
   replaceAll: boolean;
-  filters: Array<IFilter['name']>;
+  filters: Array<FilterModel['_id']>;
   thumbnail: string;
   colour: string;
 }

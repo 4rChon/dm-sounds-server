@@ -1,12 +1,18 @@
-import { model, Schema } from "mongoose";
-import IFilterModel from "../interfaces/filter.model.interface";
+import { model, Schema, Document, LeanDocument, ObjectId } from "mongoose";
 import Validators from "../validators/validators";
 
+export interface FilterLean {
+  _id?: string;
+  name: string;
+  colour: string;
+}
+
+export interface FilterDocument extends Document {
+  name: string;
+  colour: string;
+}
+
 export const filterSchema = new Schema({
-  id: {
-    type: String,
-    unique: true
-  },
   name: {
     type: String,
     unique: true,
@@ -19,4 +25,4 @@ export const filterSchema = new Schema({
   },
 });
 
-export default model<IFilterModel>('Filter', filterSchema);
+export default model<FilterDocument>('Filter', filterSchema);

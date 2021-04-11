@@ -1,10 +1,12 @@
-import IFilter from "../models/filter.interface";
+import { FilterViewModel } from "./filter.view-model";
 
-export default interface SongViewModel {
-  id: string;
+export interface SongViewModel {
+  _id?: string;
+  song_id: string;
+  name: string;
   loop: boolean;
   replaceAll: boolean;
-  name: string;
-  filters: Array<IFilter>;
+  filters: Array<FilterViewModel>;
+  thumbnail: string;
   colour: string;
 }

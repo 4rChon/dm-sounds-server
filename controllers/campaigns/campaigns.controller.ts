@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
 import DatabaseException from '../../exceptions/database.exception';
-import DuplicateCampaignException from '../../exceptions/duplicate-campaign.exception';
 import ErrorHandling from '../../exceptions/handle-exception';
 import CampaignsRepository from '../../repositories/campaigns.repository';
 import IController from '../controller.interface';
@@ -21,11 +20,7 @@ export default class CampaignsController implements IController {
   addCampaign = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await CampaignsRepository.addCampaign(req.body);
-      if (result) {
-        next(new DuplicateCampaignException());
-      } else {
-        res.status(200).send({ message: 'Campaign added' })
-      }
+      res.status(200).send({ message: 'Campaign added' })
     } catch (error) {
       ErrorHandling.handle(next, error);
     }
@@ -85,7 +80,7 @@ export default class CampaignsController implements IController {
 
   updateCampaign = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const campaign = await CampaignsRepository.updateCampaign(req.body.id, req.body);
+      const campaign = await CampaignsRepository.updateCampaign(req.body);
       if (campaign) {
         res.status(200).send({ message: 'Campaign updated!', data: campaign });
       } else {

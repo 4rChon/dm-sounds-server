@@ -1,12 +1,12 @@
-import IFilter from './filter.interface';
-import ISong from './song.interface';
+import { FilterModel } from './filter.interface';
+import { SongModel } from './song.interface';
 
-export default interface IPlaylist {
-  id: string;
+export interface PlaylistModel {
+  _id?: string;
   name: string;
   thumbnail: string;
-  songs: Array<ISong['id']>;
-  filters: Array<IFilter['name']>;
+  songs: Array<SongModel['_id']>;
+  filters: Array<FilterModel['_id']>;
   colour: string;
   loop: boolean;
   shuffle: boolean;

@@ -5,7 +5,7 @@ export default class YTPLService {
     return ytpl(id);
   }
 
-  public static validatePlaylist(id: string): boolean {
+  public static validateID(id: string): boolean {
     return ytpl.validateID(id);
   }
 }
