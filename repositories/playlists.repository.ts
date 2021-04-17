@@ -46,7 +46,18 @@ export default class PlaylistsRepository {
   }
 
   public static async addPlaylist(model: PlaylistModel): Promise<PlaylistViewModel | null> {
-    return PlaylistsService.addPlaylist(model);
+    const playlistModel: PlaylistModel = {
+      name: model.name,
+      thumbnail: model.thumbnail ?? '',
+      songs: model.songs ?? [],
+      filters: model.filters ?? [],
+      colour: model.colour ?? '#FFF',
+      loop: model.loop,
+      shuffle: model.shuffle,
+      replaceAll: model.replaceAll
+    };
+
+    return PlaylistsService.addPlaylist(playlistModel);
   }
 
   public static async getPlaylists(): Promise<Array<PlaylistViewModel>> {

@@ -1,6 +1,4 @@
 import express, { NextFunction, Request, Response } from 'express';
-import DatabaseException from '../../exceptions/database.exception';
-import DuplicatePlaylistException from '../../exceptions/duplicate-playlist.exception';
 import ErrorHandling from '../../exceptions/handle-exception';
 import PlaylistsRepository from '../../repositories/playlists.repository';
 import IController from '../controller.interface';
