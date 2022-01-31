@@ -19,7 +19,7 @@ export default class CampaignsController implements IController {
 
   addCampaign = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await CampaignsRepository.addCampaign(req.body);
+      await CampaignsRepository.addCampaign(req.body);
       res.status(200).send({ message: 'Campaign added' })
     } catch (error) {
       ErrorHandling.handle(next, error);
