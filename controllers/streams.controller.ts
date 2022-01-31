@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
-import StreamUrlException from '../../exceptions/stream-url.exception';
-import PlaylistsRepository from '../../repositories/playlists.repository';
-import IController from '../controller.interface';
+import StreamUrlException from '../exceptions/stream-url.exception';
+import PlaylistsRepository from '../repositories/playlists.repository';
+import IController from './controller.interface';
 
 export default class StreamsController implements IController {
   public path = '/streams';

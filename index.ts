@@ -1,9 +1,9 @@
 import App from './app';
-import CampaignsController from './controllers/campaigns/campaigns.controller';
-import FiltersController from './controllers/filters/filters.controller';
-import PlaylistsController from './controllers/playlists/playlists.controller';
-import SongsController from './controllers/songs/songs.controller';
-import StreamsController from './controllers/streams/streams.controller';
+import CampaignsController from './controllers/campaigns.controller';
+import FiltersController from './controllers/filters.controller';
+import PlaylistsController from './controllers/playlists.controller';
+import SongsController from './controllers/songs.controller';
+import StreamsController from './controllers/streams.controller';
 
 const app = new App(
   [

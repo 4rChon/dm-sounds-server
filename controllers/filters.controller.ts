@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
-import DatabaseException from '../../exceptions/database.exception';
-import ErrorHandling from '../../exceptions/handle-exception';
-import FiltersRepository from '../../repositories/filters.repository';
-import IController from '../controller.interface';
+import DatabaseException from '../exceptions/database.exception';
+import ErrorHandling from '../exceptions/handle-exception';
+import FiltersRepository from '../repositories/filters.repository';
+import IController from './controller.interface';
 
 export default class FiltersController implements IController {
   public path = '/filters';

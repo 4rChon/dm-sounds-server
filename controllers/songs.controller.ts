@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
-import DatabaseException from '../../exceptions/database.exception';
-import ErrorHandling from '../../exceptions/handle-exception';
-import SongsRepository from '../../repositories/songs.repository';
-import IController from '../controller.interface';
+import DatabaseException from '../exceptions/database.exception';
+import ErrorHandling from '../exceptions/handle-exception';
+import SongsRepository from '../repositories/songs.repository';
+import IController from './controller.interface';
 
 export default class SongsController implements IController {
   public path = '/songs';

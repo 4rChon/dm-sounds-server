@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
-import ErrorHandling from '../../exceptions/handle-exception';
-import PlaylistsRepository from '../../repositories/playlists.repository';
-import IController from '../controller.interface';
+import ErrorHandling from '../exceptions/handle-exception';
+import PlaylistsRepository from '../repositories/playlists.repository';
+import IController from './controller.interface';
 
 export default class PlaylistsController implements IController {
   public path = '/playlists';
