@@ -7,8 +7,11 @@ export default class CampaignsService {
   }
 
   public static async updateCampaign(campaign: CampaignModel): Promise<CampaignLean | null> {
+    //@ts-ignore
     return campaignModel.findOneAndUpdate(
-      { _id: campaign._id }, campaign, { new: true }
+      { _id: campaign._id },
+      //@ts-ignore
+      campaign, { new: true }
     ).populate({
       path: 'songs playlists',
       populate: {
@@ -19,6 +22,7 @@ export default class CampaignsService {
   }
 
   public static async getCampaigns(): Promise<Array<CampaignLean>> {
+    //@ts-ignore
     return campaignModel.find().populate({
       path: 'songs playlists',
       populate: {
@@ -29,6 +33,7 @@ export default class CampaignsService {
   }
 
   public static async getCampaign(id: string): Promise<CampaignLean | null> {
+    //@ts-ignore
     return campaignModel.findOne({ _id: id }).populate({
       path: 'songs playlists',
       populate: {
@@ -39,6 +44,7 @@ export default class CampaignsService {
   }
 
   public static async removeCampaign(id: string): Promise<CampaignLean | null> {
+    //@ts-ignore
     return campaignModel.findOneAndDelete({ _id: id }).lean().exec();
   }
 }
