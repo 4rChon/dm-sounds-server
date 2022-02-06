@@ -17,12 +17,12 @@ export default class PlaylistsService {
 
   public static async getPlaylists(): Promise<Array<PlaylistLean>> {
     //@ts-ignore
-    return playlistModel.find().lean().exec();
+    return playlistModel.find().populate('filters').populate('songs').lean().exec();
   }
 
   public static async getPlaylist(id: string): Promise<PlaylistLean | null> {
     //@ts-ignore
-    return playlistModel.findOne({ _id: id }).lean().exec();
+    return playlistModel.findOne({ _id: id }).populate('filters').populate('songs').lean().exec();
   }
 
   public static async removePlaylist(id: string): Promise<PlaylistLean | null> {

@@ -11,7 +11,7 @@ export default class SongsController implements IController {
   constructor() {
     this.router.post(`${this.path}/import`, this.importSong);
     this.router.get(this.path, this.getSongs);
-    this.router.get(`${this.path}/get-single/:id`, this.getSong);
+    this.router.get(`${this.path}/:id`, this.getSong);
     this.router.put(`${this.path}`, this.updateSong);
     this.router.delete(`${this.path}/:id`, this.removeSong);
   }
