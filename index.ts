@@ -1,4 +1,5 @@
 import App from './app';
+import AuthController from './controllers/auth.controller';
 import CampaignsController from './controllers/campaigns.controller';
 import FiltersController from './controllers/filters.controller';
 import PlaylistsController from './controllers/playlists.controller';
@@ -11,7 +12,8 @@ const app = new App(
     new PlaylistsController(),
     new StreamsController(),
     new SongsController(),
-    new CampaignsController()
+    new CampaignsController(),
+    new AuthController(),
   ], parseInt(process.env.PORT || '')
 );
 
